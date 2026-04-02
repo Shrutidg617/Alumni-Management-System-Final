@@ -15,32 +15,11 @@
     --text-color: #f4f6fb;
     --hero-gradient-start: #355070;
     --hero-gradient-end: #6d597a;
-    --button-light-bg: #ffffff;
-    --button-light-text: #355070;
     --glass-bg: rgba(255, 255, 255, 0.10);
     --glass-border: rgba(255, 255, 255, 0.22);
-    --bubble-bg: rgba(255, 255, 255, 0.08);
     --footer-bg: rgba(20, 20, 30, 0.95);
     --footer-text: #ffffff;
     --muted-text: #e2e6f0;
-}
-
-[data-theme="dark"] {
-    --primary-blue: #7cc2ff;
-    --secondary-green: #5ad18d;
-    --navbar-bg: rgba(15, 15, 24, 0.92);
-    --body-bg: linear-gradient(135deg, #2f455f, #5e4d6a);
-    --text-color: #f3f5fa;
-    --hero-gradient-start: #2f455f;
-    --hero-gradient-end: #5e4d6a;
-    --button-light-bg: #2d3443;
-    --button-light-text: #f3f5fa;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.16);
-    --bubble-bg: rgba(255, 255, 255, 0.06);
-    --footer-bg: rgba(12, 12, 20, 0.98);
-    --footer-text: #f3f5fa;
-    --muted-text: #d8ddea;
 }
 
 body {
@@ -49,7 +28,6 @@ body {
     background: var(--body-bg);
     color: var(--text-color);
     line-height: 1.6;
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Navbar */
@@ -65,18 +43,19 @@ nav {
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(10px);
-    transition: background-color 0.3s ease;
 }
+
 nav .logo {
     font-weight: 700;
     font-size: 1.8em;
     color: #ffffff;
-    transition: color 0.3s ease;
 }
+
 nav .nav-buttons {
     display: flex;
     align-items: center;
 }
+
 nav .nav-buttons button {
     margin-left: 15px;
     padding: 10px 25px;
@@ -86,73 +65,25 @@ nav .nav-buttons button {
     font-weight: 600;
     transition: all 0.3s ease;
 }
+
 nav .nav-buttons .login {
     background: var(--primary-blue);
     color: #fff;
 }
+
 nav .nav-buttons .login:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(78, 168, 255, 0.35);
 }
+
 nav .nav-buttons .signup {
     background: var(--secondary-green);
     color: #fff;
 }
+
 nav .nav-buttons .signup:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(67, 193, 122, 0.35);
-}
-
-/* Theme Toggle */
-.theme-switch-wrapper {
-    display: flex;
-    align-items: center;
-    margin-left: 20px;
-}
-.theme-switch {
-    display: inline-block;
-    height: 24px;
-    position: relative;
-    width: 48px;
-}
-.theme-switch input { display:none; }
-.slider {
-    background-color: #b9bfd0;
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-}
-.slider:before {
-    background-color: #fff;
-    bottom: 4px;
-    content: "";
-    height: 16px;
-    left: 4px;
-    position: absolute;
-    width: 16px;
-    transition: .4s;
-}
-input:checked + .slider {
-    background-color: var(--primary-blue);
-}
-input:checked + .slider:before {
-    transform: translateX(24px);
-}
-.slider.round {
-    border-radius: 34px;
-}
-.slider.round:before {
-    border-radius: 50%;
-}
-.theme-switch-wrapper label {
-    color: var(--text-color);
-    margin-left: 10px;
-    font-size: 0.9em;
-    transition: color 0.3s ease;
 }
 
 /* Hero Section */
@@ -167,6 +98,7 @@ input:checked + .slider:before {
     background: linear-gradient(135deg, var(--hero-gradient-start), var(--hero-gradient-end));
     color: #fff;
 }
+
 .hero h1 {
     font-size: 3em;
     font-weight: 700;
@@ -178,10 +110,12 @@ input:checked + .slider:before {
     -webkit-text-fill-color: transparent;
     animation: shine 6s linear infinite;
 }
+
 @keyframes shine {
     from { background-position: 0% 50%; }
     to { background-position: 200% 50%; }
 }
+
 .hero p {
     font-size: 1.2em;
     text-align: center;
@@ -223,6 +157,7 @@ input:checked + .slider:before {
     text-align: center;
     margin-top: 15px;
 }
+
 .dot {
     height: 15px;
     width: 15px;
@@ -233,6 +168,7 @@ input:checked + .slider:before {
     cursor: pointer;
     transition: background 0.3s;
 }
+
 .dot.active {
     background-color: #fff;
 }
@@ -242,11 +178,13 @@ input:checked + .slider:before {
     padding: 80px 8%;
     text-align: center;
 }
+
 .onboarding-flow h2 {
     color: #ffffff;
     font-size: 2em;
     margin-bottom: 30px;
 }
+
 .onboarding-flow .feature-item {
     flex: 1;
     max-width: 280px;
@@ -260,24 +198,29 @@ input:checked + .slider:before {
     margin: 10px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.10);
 }
+
 .onboarding-flow .feature-item:hover {
     transform: translateY(-10px);
     box-shadow: 0 14px 34px rgba(0,0,0,0.18);
 }
+
 .feature-item i {
     font-size: 2.5em;
     margin-bottom: 15px;
     color: #ffffff;
 }
+
 .feature-item h3 {
     margin-bottom: 10px;
     font-size: 1.4em;
     color: #ffffff;
 }
+
 .feature-item p {
     opacity: 0.95;
     color: var(--muted-text);
 }
+
 .onboarding-flow .features-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -290,18 +233,21 @@ input:checked + .slider:before {
     padding: 80px 8%;
     background: transparent;
 }
+
 .latest-events h2 {
     text-align: center;
     color: #ffffff;
     font-size: 2em;
     margin-bottom: 40px;
 }
+
 .events-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2rem;
 }
+
 .event-card {
     background: var(--glass-bg);
     backdrop-filter: blur(14px);
@@ -312,22 +258,27 @@ input:checked + .slider:before {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 10px 25px rgba(0,0,0,0.10);
 }
+
 .event-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 14px 34px rgba(0,0,0,0.18);
 }
+
 .event-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
 }
+
 .event-info {
     padding: 20px;
 }
+
 .event-info h3 {
     margin-top: 0;
     color: #ffffff;
 }
+
 .event-info p {
     margin: 5px 0;
     color: var(--muted-text);
@@ -349,21 +300,29 @@ footer {
         flex-direction: column;
         gap: 15px;
     }
+
     nav .nav-buttons {
         flex-wrap: wrap;
         justify-content: center;
     }
-    .slides img { max-height: 250px; }
+
+    .slides img {
+        max-height: 250px;
+    }
+
     .slider-container {
         height: 260px;
     }
+
     .hero h1 {
         font-size: 2.2em;
     }
+
     .onboarding-flow .features-wrapper {
         flex-direction: column;
         align-items: center;
     }
+
     .event-card {
         width: 90%;
     }
@@ -375,13 +334,6 @@ footer {
 <nav>
     <div class="logo">ReUnify - Centralised Alumni Management System</div>
     <div class="nav-buttons">
-        <div class="theme-switch-wrapper">
-            <label class="theme-switch" for="checkbox">
-                <input type="checkbox" id="checkbox" />
-                <div class="slider round"></div>
-            </label>
-            <label for="checkbox" class="mode-label">Light / Dark</label>
-        </div>
         <button class="login" onclick="window.location.href='login.html'">Login</button>
         <button class="signup" onclick="window.location.href='register.html'">Admin Sign Up</button>
     </div>
@@ -393,9 +345,9 @@ footer {
 
     <div class="slider-container">
         <div class="slides">
-            <img src="assets/images/img1_event.jpg" alt="Event 1">
-            <img src="assets/images/img2_event.jpg" alt="Event 2">
-            <img src="assets/images/img3_event.jpg" alt="Event 3">
+            <img src="../assets/images/img1_event.jpg" alt="Event 1">
+            <img src="../assets/images/img2_event.jpg" alt="Event 2">
+            <img src="../assets/images/img3_event.jpg" alt="Event 3">
         </div>
     </div>
     <div class="dots">
@@ -435,7 +387,7 @@ footer {
     <h2>Upcoming Events & Highlights</h2>
     <div class="events-container">
         <div class="event-card">
-            <img src="assets/images/event1.png" alt="Event 1">
+            <img src="../assets/images/event1.png" alt="Event 1">
             <div class="event-info">
                 <h3>Annual Alumni Meetup</h3>
                 <p>Date: 12th Oct 2025</p>
@@ -443,7 +395,7 @@ footer {
             </div>
         </div>
         <div class="event-card">
-            <img src="assets/images/event2.png" alt="Event 2">
+            <img src="../assets/images/event2.png" alt="Event 2">
             <div class="event-info">
                 <h3>Career Guidance Webinar</h3>
                 <p>Date: 25th Oct 2025</p>
@@ -451,7 +403,7 @@ footer {
             </div>
         </div>
         <div class="event-card">
-            <img src="assets/images/event3.jpg" alt="Event 3">
+            <img src="../assets/images/event3.jpg" alt="Event 3">
             <div class="event-info">
                 <h3>Hackathon Highlights</h3>
                 <p>Date: 5th Nov 2025</p>
@@ -466,29 +418,6 @@ footer {
 </footer>
 
 <script>
-const themeToggle = document.getElementById('checkbox');
-const body = document.body;
-
-function setTheme(theme) {
-    body.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    themeToggle.checked = (theme === 'dark');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        setTheme(savedTheme);
-    } else {
-        setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    }
-});
-
-themeToggle.addEventListener('change', () => {
-    setTheme(themeToggle.checked ? 'dark' : 'light');
-});
-
-/* Slider */
 let currentIndex = 0;
 const slides = document.querySelectorAll('.slides img');
 const dots = document.querySelectorAll('.dot');
