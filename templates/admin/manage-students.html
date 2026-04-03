@@ -1,0 +1,66 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Manage Students{% endblock %}
+{% block topbar_title %}Manage Students{% endblock %}
+{% block content %}
+<h2 class="mb-4">Student Records</h2>
+
+<div class="card p-4 bg-white mb-4">
+  <h4 class="mb-3">Add New Student</h4>
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-md-4"><input type="text" name="name" class="form-control" placeholder="Full Name" required></div>
+      <div class="col-md-4"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+      <div class="col-md-4"><input type="text" name="password" class="form-control" placeholder="Password" required></div>
+      <div class="col-md-3"><input type="text" name="phone" class="form-control" placeholder="Phone"></div>
+      <div class="col-md-3"><input type="text" name="department" class="form-control" placeholder="Department" required></div>
+      <div class="col-md-3"><input type="number" name="graduation_year" class="form-control" placeholder="Graduation Year" required></div>
+      <div class="col-md-3">
+        <select name="status" class="form-select">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="col-12"><input type="text" name="linkedin" class="form-control" placeholder="LinkedIn URL"></div>
+      <div class="col-12"><button class="btn btn-success">Add Student</button></div>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4 bg-white">
+  <h4 class="mb-3">Student List</h4>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-success">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Department</th>
+          <th>Year</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ student.student_id }}</td>
+          <td>{{ student.name }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.department }}</td>
+          <td>{{ student.graduation_year }}</td>
+          <td>{{ student.status }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_student', student_id=student.student_id) }}">
+              <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this student?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center">No students found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

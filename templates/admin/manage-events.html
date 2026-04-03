@@ -1,8 +1,6 @@
 {% extends 'admin/base_admin.html' %}
-
 {% block title %}Manage Events{% endblock %}
 {% block topbar_title %}Manage Events{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Events Management</h2>
 
@@ -15,7 +13,7 @@
       <div class="col-md-3"><input type="time" name="event_time" class="form-control" required></div>
       <div class="col-md-6"><input type="text" name="venue" class="form-control" placeholder="Venue / Location" required></div>
       <div class="col-md-3">
-        <select name="event_type" class="form-select" required>
+        <select name="event_type" class="form-select">
           <option value="Meetup">Meetup</option>
           <option value="Webinar">Webinar</option>
           <option value="Workshop">Workshop</option>
@@ -23,7 +21,14 @@
         </select>
       </div>
       <div class="col-md-3">
-        <select name="status" class="form-select" required>
+        <select name="audience" class="form-select">
+          <option value="Alumni">Alumni</option>
+          <option value="Students">Students</option>
+          <option value="Both">Both</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select name="status" class="form-select">
           <option value="Upcoming">Upcoming</option>
           <option value="Open">Open</option>
           <option value="Completed">Completed</option>
@@ -31,7 +36,7 @@
         </select>
       </div>
       <div class="col-12"><textarea name="description" class="form-control" rows="4" placeholder="Event Description"></textarea></div>
-      <div class="col-12"><button type="submit" class="btn btn-success">Save Event</button></div>
+      <div class="col-12"><button class="btn btn-success">Save Event</button></div>
     </div>
   </form>
 </div>
@@ -39,17 +44,17 @@
 <div class="card p-4 bg-white">
   <h4 class="mb-3">Existing Events</h4>
   <div class="table-responsive">
-    <table class="table table-hover align-middle">
+    <table class="table table-hover">
       <thead class="table-success">
         <tr>
           <th>#</th>
-          <th>Event Name</th>
+          <th>Title</th>
           <th>Date</th>
           <th>Time</th>
           <th>Venue</th>
-          <th>Type</th>
+          <th>Audience</th>
           <th>Status</th>
-          <th>Actions</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -60,11 +65,11 @@
           <td>{{ event.event_date }}</td>
           <td>{{ event.event_time }}</td>
           <td>{{ event.venue }}</td>
-          <td>{{ event.event_type }}</td>
-          <td><span class="badge bg-secondary">{{ event.status }}</span></td>
+          <td>{{ event.audience }}</td>
+          <td>{{ event.status }}</td>
           <td>
-            <form method="POST" action="{{ url_for('delete_event', event_id=event.event_id) }}" style="display:inline;">
-              <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this event?')">Delete</button>
+            <form method="POST" action="{{ url_for('delete_event', event_id=event.event_id) }}">
+              <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this event?')">Delete</button>
             </form>
           </td>
         </tr>

@@ -1,24 +1,48 @@
 {% extends 'alumni/base_alumni.html' %}
-
 {% block title %}Mentorship{% endblock %}
 {% block topbar_title %}Mentorship{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Mentorship Requests</h2>
 
 {% for req in requests_list %}
 <div class="border-start border-5 border-primary rounded bg-white p-3 mb-3">
-  <h5>{{ req.mentee_name }}</h5>
+  <h5>{{ req.student_name }}</h5>
+  <p class="mb-1"><strong>Email:</strong> {{ req.student_email }}</p>
+  <p class="mb-1"><strong>Department:</strong> {{ req.department }}</p>
+  <p class="mb-1"><strong>Graduation Year:</strong> {{ req.graduation_year }}</p>
+
+  {% if req.student_linkedin %}
+  <p class="mb-1">
+    <strong>LinkedIn:</strong>
+    <a href="{{ req.student_linkedin }}" target="_blank">View LinkedIn</a>
+  </p>
+  {% endif %}
+
   <p class="mb-1"><strong>Topic:</strong> {{ req.topic }}</p>
   <p class="mb-2">{{ req.message }}</p>
-  <p class="mb-2"><strong>Status:</strong> {{ req.status }}</p>
-  <form method="POST" action="{{ url_for('update_mentorship_status', request_id=req.request_id) }}" class="d-flex gap-2">
+
+  <p class="mb-2">
+    <strong>Status:</strong>
+    {% if req.status == 'Pending' %}
+      <span class="badge bg-warning text-dark">Pending</span>
+    {% elif req.status == 'Accepted' %}
+      <span class="badge bg-primary">Accepted</span>
+    {% elif req.status == 'Rejected' %}
+      <span class="badge bg-danger">Rejected</span>
+    {% elif req.status == 'Completed' %}
+      <span class="badge bg-success">Completed</span>
+    {% else %}
+      <span class="badge bg-secondary">{{ req.status }}</span>
+    {% endif %}
+  </p>
+
+  <form method="POST" action="{{ url_for('update_mentorship_status', request_id=req.request_id) }}" class="d-flex gap-2 flex-wrap">
     <button name="status" value="Accepted" class="btn btn-primary btn-sm">Accept</button>
     <button name="status" value="Rejected" class="btn btn-outline-secondary btn-sm">Reject</button>
     <button name="status" value="Completed" class="btn btn-success btn-sm">Complete</button>
   </form>
 </div>
 {% else %}
-<p class="text-muted">No mentorship requests assigned to you.</p>
+<p class="text-muted">No mentorship requests yet.</p>
 {% endfor %}
 {% endblock %}

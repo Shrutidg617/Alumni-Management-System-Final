@@ -1,84 +1,44 @@
 {% extends 'admin/base_admin.html' %}
-
 {% block title %}Analytics{% endblock %}
 {% block topbar_title %}Analytics{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Platform Analytics</h2>
 
 <div class="row g-4 mb-4">
-  <div class="col-md-6 col-lg-3">
-    <div class="card p-4 text-center bg-white">
-      <i class="fas fa-users text-success fs-1 mb-2"></i>
-      <h3>{{ total_alumni }}</h3>
-      <p class="mb-0">Total Alumni</p>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card p-4 text-center bg-white">
-      <i class="fas fa-user-check text-success fs-1 mb-2"></i>
-      <h3>{{ active_alumni }}</h3>
-      <p class="mb-0">Active Alumni</p>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card p-4 text-center bg-white">
-      <i class="fas fa-calendar-alt text-success fs-1 mb-2"></i>
-      <h3>{{ total_events }}</h3>
-      <p class="mb-0">Events Conducted</p>
-    </div>
-  </div>
-  <div class="col-md-6 col-lg-3">
-    <div class="card p-4 text-center bg-white">
-      <i class="fas fa-bullhorn text-success fs-1 mb-2"></i>
-      <h3>{{ total_announcements }}</h3>
-      <p class="mb-0">Announcements Posted</p>
-    </div>
-  </div>
+  <div class="col-md-6 col-lg-3"><div class="card p-4 text-center bg-white"><h3>{{ total_alumni }}</h3><p>Total Alumni</p></div></div>
+  <div class="col-md-6 col-lg-3"><div class="card p-4 text-center bg-white"><h3>{{ total_students }}</h3><p>Total Students</p></div></div>
+  <div class="col-md-6 col-lg-3"><div class="card p-4 text-center bg-white"><h3>{{ total_events }}</h3><p>Total Events</p></div></div>
+  <div class="col-md-6 col-lg-3"><div class="card p-4 text-center bg-white"><h3>{{ total_announcements }}</h3><p>Announcements</p></div></div>
 </div>
 
-<div class="row g-4 mb-4">
-  <div class="col-md-6">
+<div class="row g-4">
+  <div class="col-lg-6">
     <div class="card p-4 bg-white">
       <h4 class="mb-3">Quick Summary</h4>
       <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Event Registrations
-          <span class="badge bg-primary rounded-pill">{{ event_registrations }}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Mentorship Requests
-          <span class="badge bg-info rounded-pill">{{ mentorship_requests }}</span>
-        </li>
+        <li class="list-group-item d-flex justify-content-between">Event Registrations <span class="badge bg-primary rounded-pill">{{ total_registrations }}</span></li>
+        <li class="list-group-item d-flex justify-content-between">Mentorship Requests <span class="badge bg-info rounded-pill">{{ mentorship_requests }}</span></li>
       </ul>
     </div>
   </div>
-
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <div class="card p-4 bg-white">
       <h4 class="mb-3">Recent Registrations</h4>
-      <div class="table-responsive">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Alumni</th>
-              <th>Event</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in recent_registrations %}
-            <tr>
-              <td>{{ row.alumni_name }}</td>
-              <td>{{ row.event_title }}</td>
-              <td>{{ row.registration_status }}</td>
-            </tr>
-            {% else %}
-            <tr><td colspan="3" class="text-center">No registrations yet.</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      <table class="table table-sm">
+        <thead><tr><th>Name</th><th>Role</th><th>Event</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for row in recent_registrations %}
+          <tr>
+            <td>{{ row.participant_name }}</td>
+            <td>{{ row.user_role }}</td>
+            <td>{{ row.event_title }}</td>
+            <td>{{ row.registration_status }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center">No registrations yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

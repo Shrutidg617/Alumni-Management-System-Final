@@ -96,6 +96,7 @@ def login():
                 session["name"] = user["name"]
                 flash("Logged in successfully.", "success")
                 return redirect(url_for("admin_dashboard"))
+
         elif role == "alumni":
             user = execute_query(
                 "SELECT * FROM alumni WHERE email = %s AND password = %s",
@@ -108,6 +109,19 @@ def login():
                 session["name"] = user["name"]
                 flash("Logged in successfully.", "success")
                 return redirect(url_for("alumni_dashboard"))
+
+        elif role == "student":
+            user = execute_query(
+                "SELECT * FROM students WHERE email = %s AND password = %s",
+                (email, password),
+                fetchone=True
+            )
+            if user:
+                session["user_id"] = user["student_id"]
+                session["role"] = "student"
+                session["name"] = user["name"]
+                flash("Logged in successfully.", "success")
+                return redirect(url_for("student_dashboard"))
 
         flash("Invalid email, password, or role.", "danger")
         return redirect(url_for("login"))
@@ -129,7 +143,7 @@ def logout():
 def admin_dashboard():
     stats = {
         "total_alumni": execute_query("SELECT COUNT(*) AS c FROM alumni", fetchone=True)["c"],
-        "active_alumni": execute_query("SELECT COUNT(*) AS c FROM alumni WHERE status = 'Active'", fetchone=True)["c"],
+        "total_students": execute_query("SELECT COUNT(*) AS c FROM students", fetchone=True)["c"],
         "total_events": execute_query("SELECT COUNT(*) AS c FROM events", fetchone=True)["c"],
         "total_announcements": execute_query("SELECT COUNT(*) AS c FROM announcements", fetchone=True)["c"]
     }
@@ -140,58 +154,35 @@ def admin_dashboard():
 @role_required("admin")
 def manage_alumni():
     if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        password = request.form["password"]
-        phone = request.form["phone"]
-        graduation_year = request.form["graduation_year"]
-        department = request.form["department"]
-        company = request.form.get("company", "")
-        designation = request.form.get("designation", "")
-        bio = request.form.get("bio", "")
-        status = request.form["status"]
-
         execute_query(
             """
             INSERT INTO alumni
-            (name, email, password, phone, graduation_year, department, company, designation, bio, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            (name, email, password, phone, graduation_year, department, company, designation, linkedin, bio, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
-            (name, email, password, phone, graduation_year, department, company, designation, bio, status),
+            (
+                request.form["name"],
+                request.form["email"],
+                request.form["password"],
+                request.form["phone"],
+                request.form["graduation_year"],
+                request.form["department"],
+                request.form.get("company", ""),
+                request.form.get("designation", ""),
+                request.form.get("linkedin", ""),
+                request.form.get("bio", ""),
+                request.form["status"]
+            ),
             commit=True
         )
         flash("Alumni added successfully.", "success")
         return redirect(url_for("manage_alumni"))
 
-    q = request.args.get("q", "").strip()
-    dept = request.args.get("department", "").strip()
-    year = request.args.get("graduation_year", "").strip()
-
-    query = "SELECT * FROM alumni WHERE 1=1"
-    params = []
-
-    if q:
-        query += " AND name LIKE %s"
-        params.append(f"%{q}%")
-    if dept:
-        query += " AND department = %s"
-        params.append(dept)
-    if year:
-        query += " AND graduation_year = %s"
-        params.append(year)
-
-    query += " ORDER BY alumni_id DESC"
-
-    alumni_list = execute_query(query, tuple(params))
-    departments = execute_query("SELECT DISTINCT department FROM alumni ORDER BY department")
-    years = execute_query("SELECT DISTINCT graduation_year FROM alumni ORDER BY graduation_year DESC")
-
+    alumni_list = execute_query("SELECT * FROM alumni ORDER BY alumni_id DESC")
     return render_template(
         "admin/manage-alumni.html",
         active="alumni",
         alumni_list=alumni_list,
-        departments=departments,
-        years=years,
         admin_name=session.get("name")
     )
 
@@ -204,38 +195,75 @@ def delete_alumni(alumni_id):
     return redirect(url_for("manage_alumni"))
 
 
+@app.route("/admin/manage-students", methods=["GET", "POST"])
+@role_required("admin")
+def manage_students():
+    if request.method == "POST":
+        execute_query(
+            """
+            INSERT INTO students
+            (name, email, password, phone, department, graduation_year, linkedin, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                request.form["name"],
+                request.form["email"],
+                request.form["password"],
+                request.form["phone"],
+                request.form["department"],
+                request.form["graduation_year"],
+                request.form.get("linkedin", ""),
+                request.form["status"]
+            ),
+            commit=True
+        )
+        flash("Student added successfully.", "success")
+        return redirect(url_for("manage_students"))
+
+    students = execute_query("SELECT * FROM students ORDER BY student_id DESC")
+    return render_template(
+        "admin/manage-students.html",
+        active="students",
+        students=students,
+        admin_name=session.get("name")
+    )
+
+
+@app.route("/admin/manage-students/delete/<int:student_id>", methods=["POST"])
+@role_required("admin")
+def delete_student(student_id):
+    execute_query("DELETE FROM students WHERE student_id = %s", (student_id,), commit=True)
+    flash("Student deleted successfully.", "success")
+    return redirect(url_for("manage_students"))
+
+
 @app.route("/admin/manage-events", methods=["GET", "POST"])
 @role_required("admin")
 def manage_events():
     if request.method == "POST":
-        title = request.form["title"]
-        description = request.form["description"]
-        event_date = request.form["event_date"]
-        event_time = request.form["event_time"]
-        venue = request.form["venue"]
-        event_type = request.form["event_type"]
-        status = request.form["status"]
-
         execute_query(
             """
             INSERT INTO events
-            (title, description, event_date, event_time, venue, event_type, status, created_by)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            (title, description, event_date, event_time, venue, event_type, audience, status, created_by)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
-            (title, description, event_date, event_time, venue, event_type, status, session["user_id"]),
+            (
+                request.form["title"],
+                request.form["description"],
+                request.form["event_date"],
+                request.form["event_time"],
+                request.form["venue"],
+                request.form["event_type"],
+                request.form["audience"],
+                request.form["status"],
+                session["user_id"]
+            ),
             commit=True
         )
         flash("Event created successfully.", "success")
         return redirect(url_for("manage_events"))
 
-    events = execute_query(
-        """
-        SELECT e.*, a.name AS admin_name
-        FROM events e
-        JOIN admins a ON e.created_by = a.admin_id
-        ORDER BY e.event_date ASC
-        """
-    )
+    events = execute_query("SELECT * FROM events ORDER BY event_date ASC")
     return render_template("admin/manage-events.html", active="events", events=events, admin_name=session.get("name"))
 
 
@@ -251,17 +279,18 @@ def delete_event(event_id):
 @role_required("admin")
 def admin_announcements():
     if request.method == "POST":
-        title = request.form["title"]
-        message = request.form["message"]
-        audience = request.form["audience"]
-        posted_on = request.form["posted_on"]
-
         execute_query(
             """
             INSERT INTO announcements (title, message, audience, posted_by, posted_on)
             VALUES (%s, %s, %s, %s, %s)
             """,
-            (title, message, audience, session["user_id"], posted_on),
+            (
+                request.form["title"],
+                request.form["message"],
+                request.form["audience"],
+                session["user_id"],
+                request.form["posted_on"]
+            ),
             commit=True
         )
         flash("Announcement published successfully.", "success")
@@ -295,17 +324,22 @@ def delete_announcement(announcement_id):
 @role_required("admin")
 def analytics():
     total_alumni = execute_query("SELECT COUNT(*) AS c FROM alumni", fetchone=True)["c"]
-    active_alumni = execute_query("SELECT COUNT(*) AS c FROM alumni WHERE status = 'Active'", fetchone=True)["c"]
+    total_students = execute_query("SELECT COUNT(*) AS c FROM students", fetchone=True)["c"]
     total_events = execute_query("SELECT COUNT(*) AS c FROM events", fetchone=True)["c"]
     total_announcements = execute_query("SELECT COUNT(*) AS c FROM announcements", fetchone=True)["c"]
-    event_registrations = execute_query("SELECT COUNT(*) AS c FROM event_registrations", fetchone=True)["c"]
+    total_registrations = execute_query("SELECT COUNT(*) AS c FROM event_registrations", fetchone=True)["c"]
     mentorship_requests = execute_query("SELECT COUNT(*) AS c FROM mentorship_requests", fetchone=True)["c"]
 
     recent_registrations = execute_query(
         """
-        SELECT er.registration_status, er.registered_at, al.name AS alumni_name, e.title AS event_title
+        SELECT er.user_role,
+               er.registration_status,
+               er.registered_at,
+               COALESCE(a.name, s.name) AS participant_name,
+               e.title AS event_title
         FROM event_registrations er
-        JOIN alumni al ON er.alumni_id = al.alumni_id
+        LEFT JOIN alumni a ON er.alumni_id = a.alumni_id
+        LEFT JOIN students s ON er.student_id = s.student_id
         JOIN events e ON er.event_id = e.event_id
         ORDER BY er.registered_at DESC
         LIMIT 5
@@ -317,10 +351,10 @@ def analytics():
         active="analytics",
         admin_name=session.get("name"),
         total_alumni=total_alumni,
-        active_alumni=active_alumni,
+        total_students=total_students,
         total_events=total_events,
         total_announcements=total_announcements,
-        event_registrations=event_registrations,
+        total_registrations=total_registrations,
         mentorship_requests=mentorship_requests,
         recent_registrations=recent_registrations
     )
@@ -331,9 +365,11 @@ def analytics():
 @app.route("/alumni")
 @role_required("alumni")
 def alumni_dashboard():
-    announcements = execute_query("SELECT * FROM announcements ORDER BY posted_on DESC LIMIT 3")
+    announcements = execute_query(
+        "SELECT * FROM announcements WHERE audience IN ('Alumni','Both') ORDER BY posted_on DESC LIMIT 3"
+    )
     upcoming_events = execute_query(
-        "SELECT * FROM events WHERE status IN ('Upcoming', 'Open') ORDER BY event_date ASC LIMIT 3"
+        "SELECT * FROM events WHERE audience IN ('Alumni','Both') AND status IN ('Upcoming','Open') ORDER BY event_date ASC LIMIT 3"
     )
     return render_template(
         "alumni/alumni.html",
@@ -352,7 +388,7 @@ def alumni_profile():
             """
             UPDATE alumni
             SET name=%s, email=%s, phone=%s, graduation_year=%s,
-                department=%s, company=%s, designation=%s, bio=%s
+                department=%s, company=%s, designation=%s, linkedin=%s, bio=%s
             WHERE alumni_id=%s
             """,
             (
@@ -363,6 +399,7 @@ def alumni_profile():
                 request.form["department"],
                 request.form["company"],
                 request.form["designation"],
+                request.form["linkedin"],
                 request.form["bio"],
                 session["user_id"]
             ),
@@ -381,11 +418,11 @@ def alumni_profile():
 def alumni_events():
     events = execute_query(
         """
-        SELECT e.*,
-               er.registration_status
+        SELECT e.*, er.registration_status
         FROM events e
         LEFT JOIN event_registrations er
-          ON e.event_id = er.event_id AND er.alumni_id = %s
+          ON e.event_id = er.event_id AND er.alumni_id = %s AND er.user_role = 'Alumni'
+        WHERE e.audience IN ('Alumni','Both')
         ORDER BY e.event_date ASC
         """,
         (session["user_id"],)
@@ -395,15 +432,15 @@ def alumni_events():
 
 @app.route("/alumni/events/register/<int:event_id>", methods=["POST"])
 @role_required("alumni")
-def register_event(event_id):
+def register_event_alumni(event_id):
     status = request.form["status"]
     execute_query(
         """
-        INSERT INTO event_registrations (alumni_id, event_id, registration_status)
-        VALUES (%s, %s, %s)
+        INSERT INTO event_registrations (event_id, user_role, alumni_id, registration_status)
+        VALUES (%s, 'Alumni', %s, %s)
         ON DUPLICATE KEY UPDATE registration_status = VALUES(registration_status)
         """,
-        (session["user_id"], event_id, status),
+        (event_id, session["user_id"], status),
         commit=True
     )
     flash("Event response saved successfully.", "success")
@@ -414,7 +451,18 @@ def register_event(event_id):
 @role_required("alumni")
 def alumni_mentorship():
     requests_list = execute_query(
-        "SELECT * FROM mentorship_requests WHERE mentor_id = %s ORDER BY requested_at DESC",
+        """
+        SELECT mr.*,
+               s.name AS student_name,
+               s.email AS student_email,
+               s.department,
+               s.graduation_year,
+               s.linkedin AS student_linkedin
+        FROM mentorship_requests mr
+        JOIN students s ON mr.student_id = s.student_id
+        WHERE mr.mentor_id = %s
+        ORDER BY mr.requested_at DESC
+        """,
         (session["user_id"],)
     )
     return render_template(
@@ -446,6 +494,7 @@ def alumni_announcements():
         SELECT an.*, ad.name AS admin_name
         FROM announcements an
         JOIN admins ad ON an.posted_by = ad.admin_id
+        WHERE an.audience IN ('Alumni','Both')
         ORDER BY an.posted_on DESC
         """
     )
@@ -454,6 +503,134 @@ def alumni_announcements():
         active="announcements",
         announcements=announcements,
         alumni_name=session.get("name")
+    )
+
+
+# ---------------- STUDENT ----------------
+
+@app.route("/student")
+@role_required("student")
+def student_dashboard():
+    announcements = execute_query(
+        "SELECT * FROM announcements WHERE audience IN ('Students','Both') ORDER BY posted_on DESC LIMIT 3"
+    )
+    upcoming_events = execute_query(
+        "SELECT * FROM events WHERE audience IN ('Students','Both') AND status IN ('Upcoming','Open') ORDER BY event_date ASC LIMIT 3"
+    )
+    return render_template(
+        "student/student.html",
+        active="dashboard",
+        student_name=session.get("name"),
+        announcements=announcements,
+        upcoming_events=upcoming_events
+    )
+
+
+@app.route("/student/events")
+@role_required("student")
+def student_events():
+    events = execute_query(
+        """
+        SELECT e.*, er.registration_status
+        FROM events e
+        LEFT JOIN event_registrations er
+          ON e.event_id = er.event_id AND er.student_id = %s AND er.user_role = 'Student'
+        WHERE e.audience IN ('Students','Both')
+        ORDER BY e.event_date ASC
+        """,
+        (session["user_id"],)
+    )
+    return render_template("student/events.html", active="events", events=events, student_name=session.get("name"))
+
+
+@app.route("/student/events/register/<int:event_id>", methods=["POST"])
+@role_required("student")
+def register_event_student(event_id):
+    status = request.form["status"]
+    execute_query(
+        """
+        INSERT INTO event_registrations (event_id, user_role, student_id, registration_status)
+        VALUES (%s, 'Student', %s, %s)
+        ON DUPLICATE KEY UPDATE registration_status = VALUES(registration_status)
+        """,
+        (event_id, session["user_id"], status),
+        commit=True
+    )
+    flash("Event response saved successfully.", "success")
+    return redirect(url_for("student_events"))
+
+
+@app.route("/student/mentorship", methods=["GET", "POST"])
+@role_required("student")
+def student_mentorship():
+    if request.method == "POST":
+        execute_query(
+            """
+            INSERT INTO mentorship_requests (mentor_id, student_id, topic, message, status)
+            VALUES (%s, %s, %s, %s, 'Pending')
+            """,
+            (
+                request.form["mentor_id"],
+                session["user_id"],
+                request.form["topic"],
+                request.form["message"]
+            ),
+            commit=True
+        )
+        flash("Mentorship request sent successfully.", "success")
+        return redirect(url_for("student_mentorship"))
+
+    alumni_list = execute_query(
+        """
+        SELECT alumni_id, name, email, department, company, designation, linkedin
+        FROM alumni
+        WHERE status='Active'
+        ORDER BY name
+        """
+    )
+
+    my_requests = execute_query(
+        """
+        SELECT mr.*,
+               a.name AS mentor_name,
+               a.email AS mentor_email,
+               a.linkedin AS mentor_linkedin,
+               a.company,
+               a.designation
+        FROM mentorship_requests mr
+        JOIN alumni a ON mr.mentor_id = a.alumni_id
+        WHERE mr.student_id = %s
+        ORDER BY mr.requested_at DESC
+        """,
+        (session["user_id"],)
+    )
+
+    return render_template(
+        "student/mentorship.html",
+        active="mentorship",
+        alumni_list=alumni_list,
+        my_requests=my_requests,
+        student_name=session.get("name")
+    )
+
+
+@app.route("/student/announcements")
+@role_required("student")
+def student_announcements():
+    announcements = execute_query(
+        """
+        SELECT an.*, ad.name AS admin_name
+        FROM announcements an
+        JOIN admins ad ON an.posted_by = ad.admin_id
+        WHERE an.audience IN ('Students','Both')
+        ORDER BY an.posted_on DESC
+        """
+    )
+    return render_template(
+        "student/announcements.html",
+        active="announcements",
+        announcements=announcements,
+        student_name=session.get("name")
     )
 
 

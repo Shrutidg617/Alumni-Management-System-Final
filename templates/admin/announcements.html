@@ -1,8 +1,6 @@
 {% extends 'admin/base_admin.html' %}
-
 {% block title %}Announcements{% endblock %}
 {% block topbar_title %}Announcements{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Post Announcements</h2>
 
@@ -12,16 +10,15 @@
     <div class="row g-3">
       <div class="col-md-8"><input type="text" name="title" class="form-control" placeholder="Announcement Title" required></div>
       <div class="col-md-4">
-        <select name="audience" class="form-select" required>
-          <option value="All Alumni">All Alumni</option>
+        <select name="audience" class="form-select">
+          <option value="Alumni">Alumni</option>
           <option value="Students">Students</option>
-          <option value="Faculty">Faculty</option>
-          <option value="Specific Batch">Specific Batch</option>
+          <option value="Both">Both</option>
         </select>
       </div>
       <div class="col-md-4"><input type="date" name="posted_on" class="form-control" required></div>
       <div class="col-12"><textarea name="message" class="form-control" rows="4" placeholder="Write your announcement here" required></textarea></div>
-      <div class="col-12"><button type="submit" class="btn btn-warning">Publish Announcement</button></div>
+      <div class="col-12"><button class="btn btn-warning">Publish Announcement</button></div>
     </div>
   </form>
 </div>
@@ -30,19 +27,19 @@
   <h4 class="mb-3">Recent Announcements</h4>
   {% for item in announcements %}
   <div class="border-start border-5 border-success p-3 bg-light rounded mb-3">
-    <div class="d-flex justify-content-between align-items-start">
+    <div class="d-flex justify-content-between">
       <div>
         <h5>{{ item.title }}</h5>
         <p class="mb-1">{{ item.message }}</p>
         <small class="text-muted">Audience: {{ item.audience }} | Posted on: {{ item.posted_on }} | By: {{ item.admin_name }}</small>
       </div>
       <form method="POST" action="{{ url_for('delete_announcement', announcement_id=item.announcement_id) }}">
-        <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this announcement?')">Delete</button>
+        <button class="btn btn-danger btn-sm">Delete</button>
       </form>
     </div>
   </div>
   {% else %}
-  <p class="text-muted">No announcements available.</p>
+  <p>No announcements yet.</p>
   {% endfor %}
 </div>
 {% endblock %}

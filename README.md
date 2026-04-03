@@ -165,20 +165,23 @@ Open this in your browser:
 ```text
 http://127.0.0.1:5000
 ```
-
 ## Demo Login Credentials
 
 ### Admin
-
-* Email: `admin@reunify.com`
-* Password: `admin123`
-* Role: `Admin`
+- Email: `admin@reunify.com`
+- Password: `admin123`
+- Role: `Admin`
 
 ### Alumni
+- Email: `rahul@gmail.com`
+- Password: `rahul123`
+- Role: `Alumni`
 
-* Email: `rahul@gmail.com`
-* Password: `rahul123`
-* Role: `Alumni`
+### Student
+- Email: `aman@gmail.com`
+- Password: `aman123`
+- Role: `Student`
+
 
 Other demo alumni:
 
@@ -189,24 +192,28 @@ Other demo alumni:
 ## Features
 
 ### Admin
-
-* Register and login
-* View dashboard statistics
-* Add and delete alumni
-* Create and delete events
-* Publish and delete announcements
-* View analytics
+- Register and login
+- Manage alumni
+- Manage students
+- Manage events
+- Manage announcements
+- View analytics
 
 ### Alumni
+- Login
+- Update profile
+- Add LinkedIn profile
+- RSVP to alumni/both events
+- View announcements
+- Accept or reject student mentorship requests
 
-* Login
-* View dashboard
-* Update profile
-* View events
-* RSVP / mark interest
-* View mentorship requests
-* View announcements
-
+### Student
+- Login
+- View student/both events
+- RSVP to events
+- View announcements
+- Browse alumni mentors
+- Send mentorship requests
 ## Notes About Static Files
 
 In this project:
