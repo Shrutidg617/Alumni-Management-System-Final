@@ -1,17 +1,15 @@
 {% extends 'alumni/base_alumni.html' %}
-
 {% block title %}Alumni Dashboard{% endblock %}
 {% block topbar_title %}Alumni Dashboard{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Welcome, Alumni!</h2>
 
-<div class="row g-4 mb-4">
+<div class="row g-4">
   <div class="col-md-6 col-lg-3">
     <div class="card p-4 text-center bg-white">
       <i class="fas fa-user-circle text-primary fs-1 mb-2"></i>
       <h4>Profile</h4>
-      <p>Update your contact details and career info.</p>
+      <p>Update your contact details, company, and LinkedIn.</p>
       <a href="{{ url_for('alumni_profile') }}" class="btn btn-primary btn-sm">Edit Profile</a>
     </div>
   </div>
@@ -27,7 +25,7 @@
     <div class="card p-4 text-center bg-white">
       <i class="fas fa-chalkboard-teacher text-primary fs-1 mb-2"></i>
       <h4>Mentorship</h4>
-      <p>Connect with students requesting guidance.</p>
+      <p>View and respond to student mentorship requests.</p>
       <a href="{{ url_for('alumni_mentorship') }}" class="btn btn-info btn-sm text-white">View Requests</a>
     </div>
   </div>
@@ -35,13 +33,13 @@
     <div class="card p-4 text-center bg-white">
       <i class="fas fa-bullhorn text-primary fs-1 mb-2"></i>
       <h4>Announcements</h4>
-      <p>Stay updated with institutional news.</p>
+      <p>Stay updated with admin announcements.</p>
       <a href="{{ url_for('alumni_announcements') }}" class="btn btn-warning btn-sm">View Announcements</a>
     </div>
   </div>
 </div>
 
-<div class="row g-4">
+<div class="row g-4 mt-2">
   <div class="col-lg-6">
     <div class="card p-4 bg-white">
       <h4 class="mb-3">Upcoming Events</h4>
@@ -51,7 +49,7 @@
         <p class="mb-1">{{ event.event_date }} | {{ event.event_time }} | {{ event.venue }}</p>
       </div>
       {% else %}
-      <p class="text-muted">No upcoming events.</p>
+      <p>No upcoming events.</p>
       {% endfor %}
     </div>
   </div>
@@ -65,7 +63,7 @@
         <small class="text-muted">{{ item.posted_on }}</small>
       </div>
       {% else %}
-      <p class="text-muted">No announcements.</p>
+      <p>No announcements.</p>
       {% endfor %}
     </div>
   </div>

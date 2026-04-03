@@ -1,0 +1,96 @@
+{% extends 'student/base_student.html' %}
+{% block title %}Student Mentorship{% endblock %}
+{% block topbar_title %}Mentorship{% endblock %}
+{% block content %}
+<h2 class="mb-4">Request Mentorship</h2>
+
+<div class="card p-4 bg-white mb-4">
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Select Alumni Mentor</label>
+        <select name="mentor_id" class="form-select" required>
+          <option value="">Choose Mentor</option>
+          {% for mentor in alumni_list %}
+          <option value="{{ mentor.alumni_id }}">
+            {{ mentor.name }} - {{ mentor.company or 'N/A' }}{% if mentor.designation %} ({{ mentor.designation }}){% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Topic</label>
+        <input type="text" name="topic" class="form-control" placeholder="Mentorship topic" required>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Message</label>
+        <textarea name="message" class="form-control" rows="4" placeholder="Write your request" required></textarea>
+      </div>
+
+      <div class="col-12">
+        <button class="btn btn-success">Send Request</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4 bg-white">
+  <h4 class="mb-3">My Requests</h4>
+
+  {% for req in my_requests %}
+  <div class="border-start border-5 border-primary rounded bg-light p-3 mb-3">
+    <h5>{{ req.mentor_name }}</h5>
+    <p class="mb-1"><strong>Topic:</strong> {{ req.topic }}</p>
+    <p class="mb-1">{{ req.message }}</p>
+    <p class="mb-2">
+      <strong>Status:</strong>
+      {% if req.status == 'Pending' %}
+        <span class="badge bg-warning text-dark">Pending</span>
+      {% elif req.status == 'Accepted' %}
+        <span class="badge bg-primary">Accepted</span>
+      {% elif req.status == 'Rejected' %}
+        <span class="badge bg-danger">Rejected</span>
+      {% elif req.status == 'Completed' %}
+        <span class="badge bg-success">Completed</span>
+      {% else %}
+        <span class="badge bg-secondary">{{ req.status }}</span>
+      {% endif %}
+    </p>
+
+    {% if req.status == 'Accepted' %}
+    <div class="mt-2 p-3 bg-white rounded border">
+      <h6 class="mb-2">Mentor Contact Details</h6>
+      <p class="mb-1"><strong>Email:</strong> {{ req.mentor_email }}</p>
+
+      {% if req.company %}
+      <p class="mb-1"><strong>Company:</strong> {{ req.company }}</p>
+      {% endif %}
+
+      {% if req.designation %}
+      <p class="mb-1"><strong>Designation:</strong> {{ req.designation }}</p>
+      {% endif %}
+
+      {% if req.mentor_linkedin %}
+      <p class="mb-1">
+        <strong>LinkedIn:</strong>
+        <a href="{{ req.mentor_linkedin }}" target="_blank">Connect on LinkedIn</a>
+      </p>
+      {% else %}
+      <p class="mb-1 text-muted">LinkedIn not available</p>
+      {% endif %}
+    </div>
+    {% elif req.status == 'Pending' %}
+    <small class="text-muted">Your request is waiting for alumni approval.</small>
+    {% elif req.status == 'Rejected' %}
+    <small class="text-danger">This request was rejected.</small>
+    {% elif req.status == 'Completed' %}
+    <small class="text-success">This mentorship request was completed.</small>
+    {% endif %}
+  </div>
+  {% else %}
+  <p>No mentorship requests yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,8 +1,6 @@
 {% extends 'alumni/base_alumni.html' %}
-
 {% block title %}Profile{% endblock %}
 {% block topbar_title %}Profile{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">My Profile</h2>
 
@@ -36,6 +34,10 @@
       <div class="col-md-6">
         <label class="form-label">Designation</label>
         <input type="text" name="designation" class="form-control" value="{{ alumni.designation or '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">LinkedIn</label>
+        <input type="text" name="linkedin" class="form-control" value="{{ alumni.linkedin or '' }}">
       </div>
       <div class="col-12">
         <label class="form-label">Bio</label>

@@ -1,11 +1,8 @@
 {% extends 'admin/base_admin.html' %}
-
 {% block title %}Admin Dashboard{% endblock %}
 {% block topbar_title %}Admin Dashboard{% endblock %}
-
 {% block content %}
 <h2 class="mb-4">Welcome, Admin!</h2>
-
 <div class="row g-4">
   <div class="col-md-6 col-lg-3">
     <div class="card p-4 text-center bg-white">
@@ -17,10 +14,10 @@
   </div>
   <div class="col-md-6 col-lg-3">
     <div class="card p-4 text-center bg-white">
-      <i class="fas fa-user-check text-success fs-1 mb-2"></i>
-      <h4>{{ stats.active_alumni }}</h4>
-      <p>Active Alumni</p>
-      <a href="{{ url_for('manage_alumni') }}" class="btn btn-success btn-sm">View</a>
+      <i class="fas fa-user-graduate text-success fs-1 mb-2"></i>
+      <h4>{{ stats.total_students }}</h4>
+      <p>Total Students</p>
+      <a href="{{ url_for('manage_students') }}" class="btn btn-dark btn-sm">Manage</a>
     </div>
   </div>
   <div class="col-md-6 col-lg-3">
