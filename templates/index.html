@@ -21,7 +21,6 @@
     --footer-text: #ffffff;
     --muted-text: #e2e6f0;
 }
-
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -29,8 +28,6 @@ body {
     color: var(--text-color);
     line-height: 1.6;
 }
-
-/* Navbar */
 nav {
     display: flex;
     justify-content: space-between;
@@ -44,49 +41,42 @@ nav {
     z-index: 1000;
     backdrop-filter: blur(10px);
 }
-
 nav .logo {
     font-weight: 700;
     font-size: 1.8em;
     color: #ffffff;
 }
-
 nav .nav-buttons {
     display: flex;
     align-items: center;
+    gap: 15px;
 }
-
-nav .nav-buttons button {
-    margin-left: 15px;
+nav .nav-buttons a {
     padding: 10px 25px;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
 }
-
 nav .nav-buttons .login {
     background: var(--primary-blue);
     color: #fff;
 }
-
 nav .nav-buttons .login:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(78, 168, 255, 0.35);
 }
-
 nav .nav-buttons .signup {
     background: var(--secondary-green);
     color: #fff;
 }
-
 nav .nav-buttons .signup:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(67, 193, 122, 0.35);
 }
-
-/* Hero Section */
 .hero {
     position: relative;
     padding: 50px 8%;
@@ -98,7 +88,6 @@ nav .nav-buttons .signup:hover {
     background: linear-gradient(135deg, var(--hero-gradient-start), var(--hero-gradient-end));
     color: #fff;
 }
-
 .hero h1 {
     font-size: 3em;
     font-weight: 700;
@@ -110,12 +99,10 @@ nav .nav-buttons .signup:hover {
     -webkit-text-fill-color: transparent;
     animation: shine 6s linear infinite;
 }
-
 @keyframes shine {
     from { background-position: 0% 50%; }
     to { background-position: 200% 50%; }
 }
-
 .hero p {
     font-size: 1.2em;
     text-align: center;
@@ -123,8 +110,6 @@ nav .nav-buttons .signup:hover {
     color: var(--muted-text);
     max-width: 850px;
 }
-
-/* Slider */
 .slider-container {
     max-width: 700px;
     width: 100%;
@@ -139,25 +124,21 @@ nav .nav-buttons .signup:hover {
     background-color: rgba(0,0,0,0.25);
     border: 1px solid rgba(255,255,255,0.15);
 }
-
 .slides img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     display: block;
 }
-
 .slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
     width: 300%;
 }
-
 .dots {
     text-align: center;
     margin-top: 15px;
 }
-
 .dot {
     height: 15px;
     width: 15px;
@@ -168,23 +149,18 @@ nav .nav-buttons .signup:hover {
     cursor: pointer;
     transition: background 0.3s;
 }
-
 .dot.active {
     background-color: #fff;
 }
-
-/* Onboarding Flow */
 .onboarding-flow {
     padding: 80px 8%;
     text-align: center;
 }
-
 .onboarding-flow h2 {
     color: #ffffff;
     font-size: 2em;
     margin-bottom: 30px;
 }
-
 .onboarding-flow .feature-item {
     flex: 1;
     max-width: 280px;
@@ -198,56 +174,46 @@ nav .nav-buttons .signup:hover {
     margin: 10px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.10);
 }
-
 .onboarding-flow .feature-item:hover {
     transform: translateY(-10px);
     box-shadow: 0 14px 34px rgba(0,0,0,0.18);
 }
-
 .feature-item i {
     font-size: 2.5em;
     margin-bottom: 15px;
     color: #ffffff;
 }
-
 .feature-item h3 {
     margin-bottom: 10px;
     font-size: 1.4em;
     color: #ffffff;
 }
-
 .feature-item p {
     opacity: 0.95;
     color: var(--muted-text);
 }
-
 .onboarding-flow .features-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2rem;
 }
-
-/* Latest Events */
 .latest-events {
     padding: 80px 8%;
     background: transparent;
 }
-
 .latest-events h2 {
     text-align: center;
     color: #ffffff;
     font-size: 2em;
     margin-bottom: 40px;
 }
-
 .events-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 2rem;
 }
-
 .event-card {
     background: var(--glass-bg);
     backdrop-filter: blur(14px);
@@ -258,34 +224,27 @@ nav .nav-buttons .signup:hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 10px 25px rgba(0,0,0,0.10);
 }
-
 .event-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 14px 34px rgba(0,0,0,0.18);
 }
-
 .event-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
 }
-
 .event-info {
     padding: 20px;
 }
-
 .event-info h3 {
     margin-top: 0;
     color: #ffffff;
 }
-
 .event-info p {
     margin: 5px 0;
     color: var(--muted-text);
     font-size: 0.95em;
 }
-
-/* Footer */
 footer {
     text-align: center;
     padding: 25px 0;
@@ -293,39 +252,23 @@ footer {
     color: var(--footer-text);
     margin-top: 30px;
 }
-
-/* Responsive */
 @media (max-width: 768px) {
     nav {
         flex-direction: column;
         gap: 15px;
     }
-
     nav .nav-buttons {
         flex-wrap: wrap;
         justify-content: center;
     }
-
-    .slides img {
-        max-height: 250px;
-    }
-
-    .slider-container {
-        height: 260px;
-    }
-
-    .hero h1 {
-        font-size: 2.2em;
-    }
-
+    .slides img { max-height: 250px; }
+    .slider-container { height: 260px; }
+    .hero h1 { font-size: 2.2em; }
     .onboarding-flow .features-wrapper {
         flex-direction: column;
         align-items: center;
     }
-
-    .event-card {
-        width: 90%;
-    }
+    .event-card { width: 90%; }
 }
 </style>
 </head>
@@ -334,8 +277,8 @@ footer {
 <nav>
     <div class="logo">ReUnify</div>
     <div class="nav-buttons">
-        <button class="login" onclick="window.location.href='login.html'">Login</button>
-        <button class="signup" onclick="window.location.href='register.html'">Admin Sign Up</button>
+        <a href="{{ url_for('login') }}" class="login">Login</a>
+        <a href="{{ url_for('register') }}" class="signup">Admin Sign Up</a>
     </div>
 </nav>
 
@@ -345,9 +288,9 @@ footer {
 
     <div class="slider-container">
         <div class="slides">
-            <img src="../assets/images/img1_event.jpg" alt="Event 1">
-            <img src="../assets/images/img2_event.jpg" alt="Event 2">
-            <img src="../assets/images/img3_event.jpg" alt="Event 3">
+            <img src="{{ url_for('static', filename='images/img1_event.jpg') }}" alt="Event 1">
+            <img src="{{ url_for('static', filename='images/img2_event.jpg') }}" alt="Event 2">
+            <img src="{{ url_for('static', filename='images/img3_event.jpg') }}" alt="Event 3">
         </div>
     </div>
     <div class="dots">
@@ -387,7 +330,7 @@ footer {
     <h2>Upcoming Events & Highlights</h2>
     <div class="events-container">
         <div class="event-card">
-            <img src="../assets/images/event1.png" alt="Event 1">
+            <img src="{{ url_for('static', filename='images/event1.png') }}" alt="Event 1">
             <div class="event-info">
                 <h3>Annual Alumni Meetup</h3>
                 <p>Date: 12th Oct 2025</p>
@@ -395,7 +338,7 @@ footer {
             </div>
         </div>
         <div class="event-card">
-            <img src="../assets/images/event2.png" alt="Event 2">
+            <img src="{{ url_for('static', filename='images/event2.png') }}" alt="Event 2">
             <div class="event-info">
                 <h3>Career Guidance Webinar</h3>
                 <p>Date: 25th Oct 2025</p>
@@ -403,7 +346,7 @@ footer {
             </div>
         </div>
         <div class="event-card">
-            <img src="../assets/images/event3.jpg" alt="Event 3">
+            <img src="{{ url_for('static', filename='images/event3.jpg') }}" alt="Event 3">
             <div class="event-info">
                 <h3>Hackathon Highlights</h3>
                 <p>Date: 5th Nov 2025</p>
@@ -433,15 +376,12 @@ function showSlide(index) {
     dots.forEach(dot => dot.classList.remove('active'));
     dots[currentIndex].classList.add('active');
 }
-
 function nextSlide() {
     showSlide(currentIndex + 1);
 }
-
 function currentSlide(index) {
     showSlide(index);
 }
-
 setInterval(nextSlide, 5000);
 </script>
 

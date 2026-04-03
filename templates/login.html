@@ -11,28 +11,25 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
     .login-box {
-      width: 370px;
+      width: 380px;
       padding: 30px;
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.15);
       color: #333;
     }
-
     .login-box h3 {
       text-align: center;
       margin-bottom: 25px;
       font-weight: 600;
       color: #1e3c72;
     }
-
     .form-control {
       border-radius: 8px;
       box-shadow: none;
@@ -48,7 +45,6 @@
       border-radius: 8px 0 0 8px;
       color: #1e3c72;
     }
-
     .btn-custom {
       background: #1e3c72;
       border: none;
@@ -62,7 +58,6 @@
       background: #2a5298;
       transform: translateY(-2px);
     }
-
     .extra-links {
       text-align: center;
       margin-top: 15px;
@@ -81,18 +76,27 @@
 
   <div class="login-box">
     <h3>Login</h3>
-    <form id="loginForm">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
       <div class="mb-3 input-group">
         <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-        <input type="email" class="form-control" placeholder="Email" required>
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
       </div>
       <div class="mb-3 input-group">
         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-        <input type="password" class="form-control" placeholder="Password" required>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
       </div>
       <div class="mb-3 input-group">
         <span class="input-group-text"><i class="fa-solid fa-user-graduate"></i></span>
-        <select id="role" class="form-control" required>
+        <select name="role" class="form-control" required>
           <option value="">-- Choose Role --</option>
           <option value="alumni">Alumni</option>
           <option value="admin">Admin</option>
@@ -102,25 +106,13 @@
     </form>
 
     <div class="extra-links">
-      <a href="#">Forgot Password?</a> | <a href="register.html">Sign Up</a>
+      <a href="#">Forgot Password?</a> | <a href="{{ url_for('register') }}">Sign Up</a>
+    </div>
+
+    <div class="mt-3 text-center small text-muted">
+      Demo Admin: admin@reunify.com / admin123
     </div>
   </div>
-
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const role = document.getElementById("role").value;
-
-      if (role === "alumni") {
-        window.location.href = "alumni/alumni.html";
-      } else if (role === "admin") {
-        window.location.href = "admin/admin.html";
-      } else {
-        alert("Please select a role.");
-      }
-    });
-  </script>
 
 </body>
 </html>

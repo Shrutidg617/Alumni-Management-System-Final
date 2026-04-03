@@ -1,118 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Announcements</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; }
-.sidebar {
-  height: 100vh; width: 250px; position: fixed; top: 0; left: 0;
-  background-color: #343a40; color: #fff; padding-top: 70px;
-}
-.sidebar a {
-  color: #fff; padding: 12px 20px; display: flex; align-items: center; text-decoration: none; font-weight: 500;
-  transition: 0.3s;
-}
-.sidebar a i { margin-right: 10px; }
-.sidebar a:hover, .sidebar a.active { background-color: #495057; border-radius: 8px; }
-.topbar {
-  height: 60px; position: fixed; top: 0; left: 250px; right: 0;
-  background: linear-gradient(to right, #28a745, #20c997); color: #fff;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 1000;
-}
-.content { margin-left: 250px; padding: 80px 20px 20px 20px; }
-.card {
-  border-radius: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: none;
-}
-.card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.12); }
-.form-control, textarea, .form-select { border-radius: 8px; }
-.btn { border-radius: 8px; }
-.announcement-item {
-  border-left: 5px solid #28a745;
-  padding: 15px;
-  background: #fff;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-</style>
-</head>
-<body>
+{% extends 'admin/base_admin.html' %}
 
-<div class="sidebar">
-  <h4 class="text-center mb-4">Admin Panel</h4>
-  <a href="admin.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-  <a href="manage-alumni.html"><i class="fas fa-users"></i> Manage Alumni</a>
-  <a href="manage-events.html"><i class="fas fa-calendar-plus"></i> Manage Events</a>
-  <a href="announcements.html" class="active"><i class="fas fa-bullhorn"></i> Announcements</a>
-  <a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a>
-  <a href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+{% block title %}Announcements{% endblock %}
+{% block topbar_title %}Announcements{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Post Announcements</h2>
+
+<div class="card p-4 bg-white mb-4">
+  <h4 class="mb-3">Create Announcement</h4>
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-md-8"><input type="text" name="title" class="form-control" placeholder="Announcement Title" required></div>
+      <div class="col-md-4">
+        <select name="audience" class="form-select" required>
+          <option value="All Alumni">All Alumni</option>
+          <option value="Students">Students</option>
+          <option value="Faculty">Faculty</option>
+          <option value="Specific Batch">Specific Batch</option>
+        </select>
+      </div>
+      <div class="col-md-4"><input type="date" name="posted_on" class="form-control" required></div>
+      <div class="col-12"><textarea name="message" class="form-control" rows="4" placeholder="Write your announcement here" required></textarea></div>
+      <div class="col-12"><button type="submit" class="btn btn-warning">Publish Announcement</button></div>
+    </div>
+  </form>
 </div>
 
-<div class="topbar">
-  <h5>Announcements</h5>
-  <button class="btn btn-light btn-sm"><i class="fas fa-bullhorn"></i> New Announcement</button>
-</div>
-
-<div class="content">
-  <div class="container-fluid">
-    <h2 class="mb-4">Post Announcements</h2>
-
-    <div class="card p-4 bg-white mb-4">
-      <h4 class="mb-3">Create Announcement</h4>
-      <form>
-        <div class="row g-3">
-          <div class="col-md-8">
-            <input type="text" class="form-control" placeholder="Announcement Title">
-          </div>
-          <div class="col-md-4">
-            <select class="form-select">
-              <option selected>Audience</option>
-              <option>All Alumni</option>
-              <option>Students</option>
-              <option>Faculty</option>
-              <option>Specific Batch</option>
-            </select>
-          </div>
-          <div class="col-12">
-            <textarea class="form-control" rows="4" placeholder="Write your announcement here"></textarea>
-          </div>
-          <div class="col-12">
-            <button type="button" class="btn btn-warning">Publish Announcement</button>
-          </div>
-        </div>
+<div class="card p-4 bg-white">
+  <h4 class="mb-3">Recent Announcements</h4>
+  {% for item in announcements %}
+  <div class="border-start border-5 border-success p-3 bg-light rounded mb-3">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h5>{{ item.title }}</h5>
+        <p class="mb-1">{{ item.message }}</p>
+        <small class="text-muted">Audience: {{ item.audience }} | Posted on: {{ item.posted_on }} | By: {{ item.admin_name }}</small>
+      </div>
+      <form method="POST" action="{{ url_for('delete_announcement', announcement_id=item.announcement_id) }}">
+        <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this announcement?')">Delete</button>
       </form>
     </div>
-
-    <div class="card p-4 bg-white">
-      <h4 class="mb-3">Recent Announcements</h4>
-
-      <div class="announcement-item">
-        <h5>Alumni Meetup Registration Open</h5>
-        <p class="mb-1">Registration for the Annual Alumni Meetup is now open for all passed out students.</p>
-        <small class="text-muted">Posted on: 10 Oct 2025</small>
-      </div>
-
-      <div class="announcement-item">
-        <h5>Webinar on Career Growth</h5>
-        <p class="mb-1">Join our special session with distinguished alumni this weekend.</p>
-        <small class="text-muted">Posted on: 22 Oct 2025</small>
-      </div>
-
-      <div class="announcement-item">
-        <h5>Database Verification Drive</h5>
-        <p class="mb-1">All alumni are requested to verify their contact details before the end of the month.</p>
-        <small class="text-muted">Posted on: 01 Nov 2025</small>
-      </div>
-    </div>
-
   </div>
+  {% else %}
+  <p class="text-muted">No announcements available.</p>
+  {% endfor %}
 </div>
-
-</body>
-</html>
+{% endblock %}
